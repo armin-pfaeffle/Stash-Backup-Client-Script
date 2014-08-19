@@ -27,17 +27,16 @@ Now the script checks for Atlassian Stash service and that it is running, which 
 ## Run script as Windows task
 How you can add a new task [is described here](http://www.sevenforums.com/tutorials/12444-task-scheduler-create-new-task.html). The important things are to set the right parameters as application.
 
-**Program/script:**
+```
+# Program/script:
+C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe
 
-```C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe```
+# Add arguments (optional):
+-NoLogo -NonInteractive -File "C:\Users\Administrator\Desktop\Stash Backup Script\srun-stash-backup-client.0.3.ps1"
 
-**Add arguments (optional):**
-
-```-NoLogo -NonInteractive -File "C:\Users\Administrator\Desktop\Stash Backup Script\srun-stash-backup-client.0.3.ps1"```
-
-**Start in (optional):**
-
-```C:\Users\Administrator\Desktop\Stash Backup Script```
+# Start in (optional):
+C:\Users\Administrator\Desktop\Stash Backup Script
+```
 
 # Questions?
 
