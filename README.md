@@ -58,8 +58,6 @@ C:\Users\Administrator\Desktop\Stash Backup Script
 Currently there are not questions. But if you have some, please contact me via E-Mail [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
 
 
-# Author
+### Author
 
-Armin Pfäffle
-[www.armin-pfaeffle.de](http://www.armin-pfaeffle.de)
-[mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
+Armin Pfäffle  |  [www.armin-pfaeffle.de](http://www.armin-pfaeffle.de)  |  [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
