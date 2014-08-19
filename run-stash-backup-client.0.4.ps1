@@ -2,7 +2,7 @@
 #                                                                                                 #
 #  Script for Executing Stash Backup Client                                                       #
 #                                                                                                 #
-#  Version: 0.3                                                                                   #
+#  Version: 0.4                                                                                   #
 #  Date: 19.08.2014                                                                               #
 #  Author: Armin Pfäffle                                                                          #
 #  E-Mail mail@armin-pfaeffle.de                                                                  #
@@ -55,7 +55,7 @@ function EnsureMailCredentialFile
 {
 	If (!(Test-Path $mailCredentialFilename))
 	{
-		Log "Create mail credential file"
+		Log "Ask for mail credential"
 		try {
 			$credential = Get-Credential
 		} Catch {
@@ -63,10 +63,19 @@ function EnsureMailCredentialFile
 			Write-Error $ErrorMessage
 			Exit
 		}
+		
+		Log "Create mail credential file"
 		$encrytpedPassword = ConvertFrom-SecureString $credential.password
 		$line = "{0}|{1}" -f $credential.username, $encrytpedPassword
 		$line > $mailCredentialFilename
-
+		
+		Log "Send test mail"
+		$result = SendMail $configuration["Mail"]["Subject"]["Test"] -ErrorAction Stop
+		if (!$result) {		
+			Log "Delete credential file because of an error while sending mail. Please check you credential!"
+			Remove-Item $mailCredentialFilename
+		}
+		
 		Exit
 	}
 }
@@ -115,7 +124,14 @@ function SendMail($subject, $additionalBody = "")
 	# Ensure that there is no problem with certificates...
 	[System.Net.ServicePointManager]::ServerCertificateValidationCallback = { return $true }
 
-	Send-MailMessage -From $from -To $to -Subject $subject -Body $body -SmtpServer $server -Credential $credential -UseSsl
+	Try {
+		Send-MailMessage -From $from -To $to -Subject $subject -Body $body -SmtpServer $server -Credential $credential -UseSsl -ErrorAction Stop
+		Return $TRUE
+	} Catch {
+		Write-Error $_.Exception
+		Return $FALSE
+	}
+	
 }
 
 #
