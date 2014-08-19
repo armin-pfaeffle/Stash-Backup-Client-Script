@@ -3,32 +3,32 @@ Stash-Backup-Client-Script
 
 This simple script is for running [Stash Backup Client](https://marketplace.atlassian.com/plugins/com.atlassian.stash.backup.client) on a Windows computer. In my case, I wanted a script that is callable by a Windows task to run in background, so my server can run backup and notify me by E-Mail about the result.
 
-## Overview
+## Contents
 
 1. [Overview](#overview)
-	1. [Functionality/Features](#features)
-	2. [What does this script exactly do?](#description)
+	1. [Functionality/Features](#functionalityfeatures)
+	2. [What does this script exactly do?](#what-does-this-script-exactly-do)
 2. [Installation](#installation)
-3. [Run script as Windows task](#as-windows-task)
+3. [Run script as Windows task](#run-script-as-windows-task)
 1. [FAQ](#faq)
 
 
 #Overview
 
-## [Functionality/Features](#features)
+## Functionality/Features
 
 * Configurable script for running Stash Backup Client
 * Waitung for Stash service to run
 * Send notification mail after finishing script (with backup log, optional)
 * Simple mail credential configuration with test mail
 
-## [What does this script exactly do?](#description)
+## What does this script exactly do?
 
 First of all the script loads the `configuration.ps1` file, so prepare that before using the script! After that it ensures that there is a `log`directory so the script can wirte log files ‒ one log file for each day the script is executed. In the next step it checks for file existance of `stash-backup.mail-credential`file where mail credential are saved to ‒ if `SendMailAfterBackup` parameter in configuration is set to `$FALSE` then there must not mail credential. If file does not exist the script asks for mail credential, saves it and sends a test mail. If sending fails, credential file is deleted. If everything is fine script quits, so you have to run it again to execute backup.
 
 After the initialization the script checks for Atlassian Stash service and that it is running, which is necessary for executing backup. If there is any problem you will receive an E-mail with a short problem description in the subject. If everything is fine the backup client is executed, after which you will receive an E-Mail with the report. Furthermore the complete output is written to a daily log file.
 
-# [Installation](#installation)
+# Installation
 
 1. Put the script files `run-stash-backup-client.*.ps1` and `configuration.ps1` anywhere on your computer.
 2. Ensure that it has write rights to the directory because it writes log files.
@@ -50,6 +50,6 @@ C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe
 C:\Users\Administrator\Desktop\Stash Backup Script
 ```
 
-# [FAQ](#faq)
+# FAQ
 
 Currently there are not questions. But if you have some, please contact me via E-Mail [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
