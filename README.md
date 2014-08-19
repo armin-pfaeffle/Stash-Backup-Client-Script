@@ -60,4 +60,4 @@ Currently there are not questions. But if you have some, please contact me via E
 
 ### Author
 
-Armin Pfäffle  |  [www.armin-pfaeffle.de](http://www.armin-pfaeffle.de)  |  [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
+Armin Pfäffle ‒ [www.armin-pfaeffle.de](http://www.armin-pfaeffle.de) ‒ [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)
