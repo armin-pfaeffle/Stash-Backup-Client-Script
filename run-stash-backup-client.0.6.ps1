@@ -224,7 +224,7 @@ Function PrepareMailBody($successful, $backupOutput)
 
 		if ($successful) {
 			$fileSize = GetBackupFileSize $backupOutput
-			$body = "`n{0}Size of backup: {1}" -f $body, $fileSize
+			$body = "{0}`nSize of backup: {1}" -f $body, $fileSize
 		}
 
 		$body = "{0}`n`n{1}" -f $body, $backupOutput
