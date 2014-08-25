@@ -20,14 +20,14 @@ This simple script is for running [Stash Backup Client](https://marketplace.atla
 
 * Configurable script for running Stash Backup Client
 * Waitung for Stash service to run
-* Send notification mail after finishing script (with backup log, optional)
+* Send notification mail before starting and after finishing script (with backup log, optional)
 * Simple mail credential configuration with test mail
 
 ## What does this script exactly do?
 
 First of all the script loads the `configuration.ps1` file, so prepare that before using the script! After that it ensures that there is a `log`directory so the script can wirte log files ‒ one log file for each day the script is executed. In the next step it checks for file existance of `stash-backup.mail-credential`file where mail credential are saved to ‒ if `SendMailAfterBackup` parameter in configuration is set to `$FALSE` then there must not mail credential. If file does not exist the script asks for mail credential, saves it and sends a test mail. If sending fails, credential file is deleted. If everything is fine script quits, so you have to run it again to execute backup.
 
-After the initialization the script checks for Atlassian Stash service and that it is running, which is necessary for executing backup. If there is any problem you will receive an E-mail with a short problem description in the subject. If everything is fine the backup client is executed, after which you will receive an E-Mail with the report. Furthermore the complete output is written to a daily log file.
+After the initialization the script sends a "Starting backup" mail, so you know that your server is running the backup. Then it checks for Atlassian Stash service and that it is running, which is necessary for executing backup. If there is any problem you will receive an E-mail with a short problem description in the subject. If everything is fine the backup client is executed, after which you will receive an E-Mail with the report. Furthermore the complete output is written to a daily log file.
 
 
 # Installation

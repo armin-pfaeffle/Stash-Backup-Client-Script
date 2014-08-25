@@ -63,19 +63,19 @@ function EnsureMailCredentialFile
 			Write-Error $ErrorMessage
 			Exit
 		}
-		
+
 		Log "Create mail credential file"
 		$encrytpedPassword = ConvertFrom-SecureString $credential.password
 		$line = "{0}|{1}" -f $credential.username, $encrytpedPassword
 		$line > $mailCredentialFilename
-		
+
 		Log "Send test mail"
 		$result = SendMail $configuration["Mail"]["Subject"]["Test"] -ErrorAction Stop
-		if (!$result) {		
+		if (!$result) {
 			Log "Delete credential file because of an error while sending mail. Please check you credential!"
 			Remove-Item $mailCredentialFilename
 		}
-		
+
 		Exit
 	}
 }
@@ -98,7 +98,7 @@ function GetMailCredential
 #
 # Sends mail with given subject. Adds additional text to body if $additionalBody is set.
 #
-function SendMail($subject, $additionalBody = "")
+function SendMail($subject, $body = "", $prependScriptStartAndEndTimestamp = $TRUE)
 {
 	Log ("Sending mail '{0}'" -f $subject)
 
@@ -115,10 +115,9 @@ function SendMail($subject, $additionalBody = "")
 		$subject = "{0} {1}" -f $mail["Subject"]["Prefix"], $subject
 	}
 
-	$currentTimestamp = Get-Date
-	$body = "Skript startet: {0}`nSkript ended: {1}" -f $scriptStartedTimestamp, $currentTimestamp
-	if ($additionalBody) {
-		$body = $body + "`n`n" + $additionalBody
+	if ($prependScriptStartAndEndTimestamp) {
+		$currentTimestamp = Get-Date
+		$body = "Skript started: {0}`nSkript ended: {1}`n`n{2}" -f $scriptStartedTimestamp, $currentTimestamp, $body
 	}
 
 	# Ensure that there is no problem with certificates...
@@ -131,7 +130,7 @@ function SendMail($subject, $additionalBody = "")
 		Write-Error $_.Exception
 		Return $FALSE
 	}
-	
+
 }
 
 #
@@ -195,8 +194,12 @@ $logFilename = "{0}\{1}.log" -f $logDirectory, $today
 
 EnsureLogDirectory
 
-if ($configuration["SendMailAfterBackup"]) {
+if ($configuration["SendMailBeforeBackup"] -or $configuration["SendMailAfterBackup"]) {
 	EnsureMailCredentialFile
+}
+
+if ($configuration["SendMailBeforeBackup"]) {
+	$sendResult = SendMail $configuration["Mail"]["Subject"]["Start"] " " $FALSE
 }
 
 $service = Get-Service -Name $configuration["ServiceName"]
@@ -220,12 +223,12 @@ if ($service)
 			} Else {
 				$subject = $configuration["Mail"]["Subject"]["Success"]
 			}
-			SendMail $subject $mailOutput
+			$sendResult = SendMail $subject $mailOutput
 		}
 	} Else {
 		Log "Service is not running, needs to long to start or is stopped and does not start"
 		if ($configuration["SendMailAfterBackup"]) {
-			SendMail $configuration["Mail"]["Subject"]["ServiceNotRunning"]
+			$sendResult = SendMail $configuration["Mail"]["Subject"]["ServiceNotRunning"]
 		}
 	}
 }
@@ -233,6 +236,6 @@ Else
 {
 	Log ("Service '{0}' not found" -f $configuration["ServiceName"])
 	if ($configuration["SendMailAfterBackup"]) {
-		SendMail $configuration["Mail"]["Subject"]["ServiceNotFound"]
+		$sendResult = SendMail $configuration["Mail"]["Subject"]["ServiceNotFound"]
 	}
 }

@@ -7,6 +7,7 @@ $configuration = @{
 	"ServiceName" = "AtlassianStash";
 	"MaxSecondsWaitingForService" = 300;
 
+	"SendMailBeforeBackup" = $TRUE;
 	"SendMailAfterBackup" = $TRUE;
 	"Mail" = @{
 		"From" = "from@example.com";
@@ -16,6 +17,8 @@ $configuration = @{
 		"Subject" = @{
 			"Prefix" = "[Stash Backup]";
 
+			"Test" = "Testing mail credential";
+			"Start" = "Starting backup";
 			"Success" = "Successful";
 			"Error" = "Error";
 			"ServiceNotFound" = "Service not found";
