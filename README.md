@@ -55,7 +55,12 @@ C:\Users\Administrator\Desktop\Stash Backup Script
 
 # FAQ
 
-Currently there are not questions. But if you have some, please contact me via E-Mail [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
+1. Can I send the notification mails to more than one e-mail address?
+
+Yes you can! In the `configuration.ps1` you can see the option `To` in the `Mail` group. There you can set at least one e-mail address or set more than one by separating them via a comma, e.g. the line can look like `"To" = "first@example.com, second@example.com, third@example.com";`.
+
+
+When you habe any further questions, please contact me via E-Mail [mail@armin-pfaeffle.de](mailto:mail@armin-pfaeffle.de)!
 
 
 ### Author
