@@ -1,9 +1,9 @@
-###################################################################################################
+﻿###################################################################################################
 #                                                                                                 #
 #  Script for Executing Stash Backup Client                                                       #
 #                                                                                                 #
-#  Version: 0.6                                                                                   #
-#  Date: 25.08.2014                                                                               #
+#  Version: 0.7                                                                                   #
+#  Date: 11.11.2014                                                                               #
 #  Author: Armin Pfäffle                                                                          #
 #  E-Mail mail@armin-pfaeffle.de                                                                  #
 #  Web: http://www.armin-pfaeffle.de                                                              #
@@ -56,7 +56,7 @@ Function EnsureMailCredentialFile
 	If (!(Test-Path $mailCredentialFilename))
 	{
 		Log "Ask for mail credential"
-		try {
+		Try {
 			$credential = Get-Credential
 		} Catch {
 			$ErrorMessage = $_.Exception.Message
@@ -184,15 +184,10 @@ Function RunStashBackup
 #
 Function GetBackupFileSize($backupOutput)
 {
-	$pattern = "Backup complete: (.*?)\.tar"
-	$regex = [regex] $pattern
-	$match = $regex.Match($backupOutput)
-	if ($match.Success -and ($match.Groups.Count -gt 1)) {
-		$filename = "{0}.tar" -f $match.Groups[1]
-		if (Test-Path $filename) {
-			$fileSize = (Get-Item $filename).length # in KB
-			Return FormatFileSize $fileSize
-		}
+	$filename = GetBackupFilename $backupOutput
+	if (Test-Path $filename) {
+		$fileSize = (Get-Item $filename).length # in KB
+		Return FormatFileSize $fileSize
 	}
 	Return $FALSE
 }
@@ -211,6 +206,42 @@ Function FormatFileSize($size)
 }
 
 #
+# Returns free disk space of partition where backup is stored.
+#
+Function GetFreeDiskSpace($backupOutput)
+{
+	$filename = GetBackupFilename $backupOutput
+	if ($filename -ne $FALSE) {
+		Try {
+			$qualifier = split-path $filename -qualifier
+			$filter = "name='{0}'" -f $qualifier
+			$diskSpace = Get-WMIObject Win32_LogicalDisk -filter $filter | select freespace
+			$freeDiskSpace = FormatFileSize $diskSpace.freespace
+			Return $freeDiskSpace
+		} Catch {
+			$ErrorMessage = $_.Exception.Message
+			Write-Error $ErrorMessage
+		}
+	}
+	Return $FALSE
+}
+
+#
+# Extracts filename of backup from backup process output.
+#
+Function GetBackupFilename($backupOutput)
+{
+	$pattern = "Backup complete: (.*?)\.tar"
+	$regex = [regex] $pattern
+	$match = $regex.Match($backupOutput)
+	if ($match.Success -and ($match.Groups.Count -gt 1)) {
+		$filename = "{0}.tar" -f $match.Groups[1]
+		Return $filename
+	}
+	Return $FALSE
+}
+
+#
 # Prepares the body for the final notification mail. Adds the computername and the backup
 # file size if backup was successful.
 #
@@ -225,9 +256,17 @@ Function PrepareMailBody($successful, $backupOutput)
 		if ($successful) {
 			$fileSize = GetBackupFileSize $backupOutput
 			$body = "{0}`nSize of backup: {1}" -f $body, $fileSize
+			
+			$freeDiskSpace = GetFreeDiskSpace $backupOutput
+			if ($freeDiskSpace -ne $FALSE) {
+				$qualifier = split-path $filename -qualifier
+				$body = "{0}`nFree disk space: {1}" -f $body, $freeDiskSpace
+			} Else {
+				$body = "{0}`nFree disk space: unknown" -f $body
+			}
 		}
 
-		$body = "{0}`n`n{1}" -f $body, $backupOutput
+		$body = "{0}`n`n-----`n{1}" -f $body, $backupOutput
 	}
 	Return $body
 }
@@ -244,7 +283,6 @@ $logDirectory = "{0}\log" -f $currentDirectory
 
 $today = Get-Date -UFormat "%Y%m%d"
 $logFilename = "{0}\{1}.log" -f $logDirectory, $today
-
 
 EnsureLogDirectory
 

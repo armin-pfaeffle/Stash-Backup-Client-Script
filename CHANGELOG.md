@@ -1,6 +1,11 @@
 Changelog
 ==========================
 
+### Version 0.7
+
+* Added free disk space of partition where backup is stored in final notification mail
+
+
 ### Version 0.6
 
 * Added computer name to final notification mail
