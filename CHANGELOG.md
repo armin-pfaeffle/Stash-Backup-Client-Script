@@ -1,6 +1,12 @@
 Changelog
 ==========================
 
+### Version 0.9
+
+* Added HDD qualifier to free disk space information
+* Bugfix: invalid code throws exception
+
+
 ### Version 0.8
 
 * Added exception handling when "java" command fails

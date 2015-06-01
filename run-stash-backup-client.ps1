@@ -264,8 +264,10 @@ Function PrepareMailBody($successful, $backupOutput)
 			
 			$freeDiskSpace = GetFreeDiskSpace $backupOutput
 			if ($freeDiskSpace -ne $FALSE) {
+				$filename = GetBackupFilename $backupOutput
+				Log $filename;
 				$qualifier = split-path $filename -qualifier
-				$body = "{0}`nFree disk space: {1}" -f $body, $freeDiskSpace
+				$body = "{0}`nFree disk space on ""{1}"": {2}" -f $body, $qualifier, $freeDiskSpace
 			} Else {
 				$body = "{0}`nFree disk space: unknown" -f $body
 			}
