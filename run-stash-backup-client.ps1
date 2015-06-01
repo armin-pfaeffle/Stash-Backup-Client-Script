@@ -2,8 +2,8 @@
 #                                                                                                 #
 #  Script for Executing Stash Backup Client                                                       #
 #                                                                                                 #
-#  Version: 0.7                                                                                   #
-#  Date: 11.11.2014                                                                               #
+#  Version: 0.8                                                                                   #
+#  Date: 01.06.2015                                                                               #
 #  Author: Armin Pfäffle                                                                          #
 #  E-Mail mail@armin-pfaeffle.de                                                                  #
 #  Web: http://www.armin-pfaeffle.de                                                              #
@@ -167,9 +167,14 @@ Function RunStashBackup
 	if ($stash["WorkingDirectory"]) {
 		cd $stash["WorkingDirectory"]
 	}
-	#Invoke-Expression $stash["Executable"] 2>&1 | Tee-Object -Variable output
-	$output = (Invoke-Expression $stash["Executable"] 2>&1) | Out-String
-
+	Try {
+		$output = (Invoke-Expression $stash["Executable"] 2>&1) | Out-String
+	} Catch {
+		$ErrorMessage = $_.Exception.Message
+		Write-Error $ErrorMessage
+		$output = "Exception: " + $ErrorMessage
+	}
+	
 	Log $output $FALSE
 
 	# Restore working directory

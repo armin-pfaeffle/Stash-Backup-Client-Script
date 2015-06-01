@@ -32,7 +32,7 @@ After the initialization the script sends a "Starting backup" mail, so you know 
 
 # Installation
 
-1. Put the script files `run-stash-backup-client.*.ps1` and `configuration.ps1` anywhere on your computer.
+1. Put the script files `run-stash-backup-client.ps1` and `configuration.ps1` anywhere on your computer.
 2. Ensure that it has write rights to the directory because it writes log files.
 3. Open `configuration.ps1` modify it for you needs. If you don't want to receive reports via E-Mail set `SendMailAfterBackup` to `$FALSE` and you can ignore the `Mail`section.
 4. If you want to receive E-Mails you have to run the script via Windows PowerShell before you can use it as backup script. The reason for this is that it asks you for username and password for the mail server and stores this data to a file `stash-backup.mail-credential`. So script can access mail credential and send mail automatically. After entering credential you receive a test mail and the script quits.
@@ -46,10 +46,10 @@ How you can add a new task [is described here](http://www.sevenforums.com/tutori
 C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe
 
 // Add arguments (optional):
--NoLogo -NonInteractive -File "C:\Users\Administrator\Desktop\Stash Backup Script\srun-stash-backup-client.0.3.ps1"
+-NoLogo -NonInteractive -File "C:\Atlassian Stash\Stash Backup Script\srun-stash-backup-client.ps1"
 
 // Start in (optional):
-C:\Users\Administrator\Desktop\Stash Backup Script
+C:\Atlassian Stash\Stash Backup Script
 ```
 
 

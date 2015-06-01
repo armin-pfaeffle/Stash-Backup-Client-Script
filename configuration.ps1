@@ -2,7 +2,7 @@
 $configuration = @{
 	"Stash" = @{
 		"Executable" = "java -jar -noverify stash-backup-client.jar";
-		"WorkingDirectory" = "C:\Atlassian\Stash\stash-backup-client-1.3.0";
+		"WorkingDirectory" = "C:\Atlassian\Stash\stash-backup-client-1.9.1";
 	};
 	"ServiceName" = "AtlassianStash";
 	"MaxSecondsWaitingForService" = 300;

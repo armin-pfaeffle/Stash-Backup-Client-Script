@@ -1,6 +1,11 @@
 Changelog
 ==========================
 
+### Version 0.8
+
+* Added exception handling when "java" command fails
+
+
 ### Version 0.7
 
 * Added free disk space of partition where backup is stored in final notification mail
