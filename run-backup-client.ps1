@@ -1,12 +1,15 @@
-﻿###################################################################################################
+###################################################################################################
 #                                                                                                 #
-#  Script for Executing Stash Backup Client                                                       #
+#  Script for Executing Bitbucket Server Backup Client                                            #
 #                                                                                                 #
-#  Version: 0.8                                                                                   #
-#  Date: 01.06.2015                                                                               #
+#  Version: 0.9                                                                                   #
+#  Date: 27.10.2015                                                                               #
 #  Author: Armin Pfäffle                                                                          #
 #  E-Mail mail@armin-pfaeffle.de                                                                  #
 #  Web: http://www.armin-pfaeffle.de                                                              #
+#                                                                                                 #
+#  Bitbucket Server Backup Client:                                                                #
+#  https://marketplace.atlassian.com/plugins/com.atlassian.stash.backup.client/                   #
 #                                                                                                 #
 ###################################################################################################
 
@@ -153,22 +156,22 @@ Function WaitForRunningService
 }
 
 #
-# Changes working directory to Stash Backup Client directory, then runs the Stash Backup Client
+# Changes working directory to Backup Client directory, then runs the Backup Client
 # and finally returns to the original working directory.
 #
-Function RunStashBackup
+Function RunBackup
 {
-	Log "Run Stash Backup Client"
+	Log "Run Backup Client"
 	Log ""
 
-	$stash = $configuration["Stash"]
+	$bitbucketServer = $configuration["Bitbucket Server"]
 
 	# Change to working directory and execute application
-	if ($stash["WorkingDirectory"]) {
-		cd $stash["WorkingDirectory"]
+	if ($bitbucketServer["WorkingDirectory"]) {
+		cd $bitbucketServer["WorkingDirectory"]
 	}
 	Try {
-		$output = (Invoke-Expression $stash["Executable"] 2>&1) | Out-String
+		$output = (Invoke-Expression $bitbucketServer["Executable"] 2>&1) | Out-String
 	} Catch {
 		$ErrorMessage = $_.Exception.Message
 		Write-Error $ErrorMessage
@@ -283,7 +286,7 @@ Function PrepareMailBody($successful, $backupOutput)
 
 
 $scriptStartedTimestamp = Get-Date
-$mailCredentialFilename = ".\stash-backup.mail-credential"
+$mailCredentialFilename = ".\backup-client.mail-credential"
 
 $currentDirectory = $(get-location)
 $logDirectory = "{0}\log" -f $currentDirectory
@@ -309,9 +312,9 @@ if ($service)
 	$serviceIsAvailable = WaitForRunningService
 	if ($serviceIsAvailable) {
 		Log "Service is running"
-		Log "Starting Stash Backup Client"
+		Log "Starting Backup Client"
 
-		$backupOutput = RunStashBackup
+		$backupOutput = RunBackup
 
 		if ($configuration["SendMailAfterBackup"]) {
 			if ($backupOutput -match "Exception") {

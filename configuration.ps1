@@ -1,12 +1,12 @@
 
 $configuration = @{
-	"Stash" = @{
-		"Executable" = "java -jar -noverify stash-backup-client.jar";
-		"WorkingDirectory" = "C:\Atlassian\Stash\stash-backup-client-1.9.1";
+	"Bitbucket Server" = @{
+		"Executable" = "java -jar -noverify bitbucket-backup-client.jar";
+		"WorkingDirectory" = "C:\Atlassian\Bitbucket\bitbucket-backup-client-2.0.0";
 	};
-	"ServiceName" = "AtlassianStash";
+	"ServiceName" = "AtlassianBitbucket";
 	"MaxSecondsWaitingForService" = 300;
-
+	
 	"SendMailBeforeBackup" = $TRUE;
 	"SendMailAfterBackup" = $TRUE;
 	"Mail" = @{
@@ -15,7 +15,7 @@ $configuration = @{
 		"Server" = "mail.example.com";
 
 		"Subject" = @{
-			"Prefix" = "[Stash Backup]";
+			"Prefix" = "[Bitbucket Server Backup]";
 
 			"Test" = "Testing mail credential";
 			"Start" = "Starting backup";
